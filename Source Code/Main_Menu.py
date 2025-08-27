@@ -18,6 +18,8 @@ def Main_Menu(self):
 
     button_timer = Button(self, text="Pomodoro Timer", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40, command=lambda: start_timer(self))
     button_timer.pack(pady=20)
+    button_Tracker = Button(self, text="Expenses Tracker", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40)
+    button_Tracker.pack(pady=20)
 
 
 if __name__ == "__main__":

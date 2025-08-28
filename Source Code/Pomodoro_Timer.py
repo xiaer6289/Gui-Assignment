@@ -55,7 +55,7 @@ class Pomodoro_Timer:
         operationMenu.add_command(label="Switch Theme")
         menubar.add_cascade(label = "Setting", menu = operationMenu)
         exitMenu = Menu(menubar, tearoff = 0)
-        exitMenu.add_command(label = "Return")
+        exitMenu.add_command(label = "Return", command = self.return_to_main)
         exitMenu.add_command(label = "Quit", command = self.window.destroy)
         menubar.add_cascade(label = "Exit", menu = exitMenu)
     
@@ -434,7 +434,7 @@ class Pomodoro_Timer:
             # skip back to work
             self._work()
 
-    def _break(self):
+    def _break(self): # move to break session and start countdown for 5 min
         self.pause_timer()
         self.mode = "Break Session"
         self.hours.set(0)
@@ -443,7 +443,7 @@ class Pomodoro_Timer:
         self.text_label.config(text=self.mode)
         self.start_timer()
 
-    def _work(self):
+    def _work(self): # move to work session 
         self.pause_timer()
         self.mode = "Work Session"
         self.hours.set(0)
@@ -452,14 +452,14 @@ class Pomodoro_Timer:
         self.text_label.config(text=self.mode)
         self.update_timer()
 
-    def _save(self):
+    def _save(self): # save dictionary into txt file
         try:
             with open(self.filepath, 'w', encoding='utf-8') as f:
                 json.dump(self.records, f, indent=2, ensure_ascii=False)
         except Exception:
             print('Failed to save records')
 
-    def _load(self):
+    def _load(self): #display rhe data in txt file
         if os.path.exists(self.filepath):
             try:
                 with open(self.filepath, 'r', encoding='utf-8') as f:
@@ -467,6 +467,15 @@ class Pomodoro_Timer:
             except Exception:
                 print('Failed to load records')
                 self.records = {}
+
+    def return_to_main(self):
+        for widget in self.window.winfo_children():
+            widget.destroy()
+
+        # rebuild main menu
+        from Main_Menu import Main_Menu
+        Main_Menu(self.window)
+    
 
 
 # change theme (background using image)

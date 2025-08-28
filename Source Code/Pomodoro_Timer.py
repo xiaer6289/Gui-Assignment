@@ -1,8 +1,5 @@
-from email import header
 from tkinter import *
-from datetime import datetime, timedelta
-import time
-import tkinter as tk
+from datetime import datetime
 import winsound
 from tkinter import messagebox
 import json
@@ -50,10 +47,10 @@ class Pomodoro_Timer:
         menubar = Menu(self.window)
         self.window.config(menu = menubar)
 
-        operationMenu = Menu(menubar, tearoff = 0)
-        operationMenu.add_command(label="Switch Music") #todo: add command
-        operationMenu.add_command(label="Switch Theme")
-        menubar.add_cascade(label = "Setting", menu = operationMenu)
+        # operationMenu = Menu(menubar, tearoff = 0)
+        # operationMenu.add_command(label="Switch Music") #todo: add command
+        # operationMenu.add_command(label="Switch Theme")
+        # menubar.add_cascade(label = "Setting", menu = operationMenu)
         exitMenu = Menu(menubar, tearoff = 0)
         exitMenu.add_command(label = "Return", command = self.return_to_main)
         exitMenu.add_command(label = "Quit", command = self.window.destroy)
@@ -75,11 +72,11 @@ class Pomodoro_Timer:
         timer_frame.pack(pady = 5)
         #hours control
         self.hour_label = Label(timer_frame, text="Hours", font=("Arial", 14))
-        self.hour_decrease5_btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5hours)
-        self.hour_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_hours)
+        self.hour_decrease5_btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5hours, cursor="hand2")
+        self.hour_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_hours, cursor="hand2")
         self.hour_entry = Entry(timer_frame, textvariable=self.hours, width=5)
-        self.hour_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_hours)
-        self.hour_increase5_btn = Button(timer_frame, text=">>", width=2, command=self.increase_5hours)
+        self.hour_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_hours, cursor="hand2")
+        self.hour_increase5_btn = Button(timer_frame, text=">>", width=2, command=self.increase_5hours, cursor="hand2")
         self.hour_decrease5_btn.pack(side=LEFT, padx = 1)
         self.hour_decrease_btn.pack(side=LEFT, padx = 1)
         self.hour_entry.pack(side=LEFT, padx = 5)
@@ -88,11 +85,11 @@ class Pomodoro_Timer:
 
         # minutes control
         self.minute_label = Label(timer_frame, text="Minutes", font=("Arial", 14))
-        self.minute_decrease_5btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5min)
-        self.minute_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_min)
+        self.minute_decrease_5btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5min, cursor="hand2")
+        self.minute_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_min, cursor="hand2")
         self.minute_entry = Entry(timer_frame, textvariable=self.minutes, width=5)
-        self.minute_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_min)
-        self.minute_increase_5btn = Button(timer_frame, text=">>", width=2, command=self.increase_5min)
+        self.minute_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_min, cursor="hand2")
+        self.minute_increase_5btn = Button(timer_frame, text=">>", width=2, command=self.increase_5min, cursor="hand2")
         self.minute_decrease_5btn.pack(side=LEFT, padx=1)
         self.minute_decrease_btn.pack(side=LEFT, padx=1)
         self.minute_entry.pack(side=LEFT, padx=5)
@@ -101,24 +98,57 @@ class Pomodoro_Timer:
 
         btn_frame = Frame(self.window)
         btn_frame.pack(pady = 10)
-        self.start_btn = Button(btn_frame, text = "Start", font = ("Arial", 16, "bold"), bg="lightgreen", command=self.start_timer)
+        self.start_btn = Button(btn_frame, text = "Start", font = ("Arial", 16, "bold"), bg="lightgreen", command=self.start_timer, cursor="hand2", width=6)
         self.start_btn.pack(side = LEFT, padx = 30)
 
-        self.pause_btn = Button(btn_frame, text = "Pause" , font = ("Arial", 16, "bold"), bg="red", command=self.pause_timer)
+        self.pause_btn = Button(btn_frame, text = "Pause" , font = ("Arial", 16, "bold"), bg="red", command=self.pause_timer, cursor="hand2")
         self.pause_btn.pack(side = LEFT, padx = 30)
 
-        self.reset_btn = Button(btn_frame, text = "Reset", font = ("Arial", 16, "bold"), bg="lightblue", command=self.reset_timer)
+        self.reset_btn = Button(btn_frame, text = "Reset", font = ("Arial", 16, "bold"), bg="lightblue", command=self.reset_timer, cursor="hand2")
         self.reset_btn.pack(side = LEFT, padx = 30)
 
-        self.skip_btn = Button(btn_frame, text = "⏯️", font = (16), command = self.skip)
+        self.skip_btn = Button(btn_frame, text = "⏯️", font = (16), command = self.skip, cursor="hand2", width=3)
         self.skip_btn.pack(side = LEFT, padx = 40)
 
         self.text_label = Label(self.window, text=self.mode, font=("Marcellus", 11, "italic"))
         self.text_label.pack(pady = 3)
 
-        table_frame = Frame(self.window)
-        table_frame.pack(pady = 20)
-        self.table_frame = table_frame
+        # records table with a fixed header and a scrollable body
+        table_container = Frame(self.window)
+        table_container.pack(pady=20, fill=BOTH, expand=False)
+
+        # header (stays fixed)
+        header_frame = Frame(table_container)
+        header_frame.pack(fill='x')
+        self.table_header = header_frame
+
+        # canvas + scrollbar for rows
+        canvas_holder = Frame(table_container)
+        canvas_holder.pack(fill=BOTH, expand=True)
+        canvas = Canvas(canvas_holder, height=200)
+        vsb = Scrollbar(canvas_holder, orient=VERTICAL, command=canvas.yview, cursor="fleur")
+        canvas.configure(yscrollcommand=vsb.set)
+        vsb.pack(side=RIGHT, fill=Y)
+        canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        inner = Frame(canvas)
+        canvas.create_window((0, 0), window=inner, anchor='nw')
+
+        # keep scrollregion updated
+        def _on_frame_config(event, c=canvas):
+            c.configure(scrollregion=c.bbox('all'))
+
+        inner.bind('<Configure>', _on_frame_config)
+
+        # mouse wheel support (Windows)
+        def _on_mousewheel(event, c=canvas):
+            c.yview_scroll(int(-1 * (event.delta / 120)), 'units')
+
+        # bind to canvas rather than to all widgets to avoid interfering with other controls
+        canvas.bind_all('<MouseWheel>', _on_mousewheel)
+
+        self.table_canvas = canvas
+        self.table_inner = inner
         self.create_table()
 
 
@@ -372,33 +402,33 @@ class Pomodoro_Timer:
         if not isinstance(self.records, dict):
             self.records = {}
         self.records_dict = self.records
-        # draw header + rows from loaded records
+    # draw header + rows from loaded records
         self.refresh_table()
 
     def refresh_table(self):
-        # Clear all widgets from table_frame (except header row)
-        for widget in self.table_frame.winfo_children():
+        # Clear header and inner frames
+        for widget in self.table_header.winfo_children():
+            widget.destroy()
+        for widget in self.table_inner.winfo_children():
             widget.destroy()
 
-        # Recreate header
+        # Recreate header (fixed)
         header = ["Date", "Time", "Countdown", "Completion", ""]
         for col, text in enumerate(header):
-            label = Label(self.table_frame, text=text, relief="solid", width=16)
+            label = Label(self.table_header, text=text, relief="solid", width=16)
             label.grid(row=0, column=col, sticky="nsew")
 
-        # Recreate rows from dictionary
-        for row, (key, record) in enumerate(self.records_dict.items(), start=1):
+        # Recreate rows inside scrollable inner frame
+        for row, (key, record) in enumerate(self.records_dict.items(), start=0):
             values = [record['date'], record['time'], record['countdown'],
-                  "Completed" if record['complete'] else "Incomplete"]
-            
+                      "Completed" if record['complete'] else "Incomplete"]
             for col, val in enumerate(values):
-                label = Label(self.table_frame, text=val, relief="solid", width=16)
-                label.grid(row=row, column=col, sticky="nsew")
+                label = Label(self.table_inner, text=val, relief="solid", width=16)
+                label.grid(row=row, column=col, sticky="nsew", padx=0, pady=0)
 
-            # Add delete button for each row
-            dlt_btn = Button(self.table_frame, text="Delete", font=("Arial", 8),
-                     command=lambda k=key: self.delete_record(k), relief="solid")
-            dlt_btn.grid(row=row, column=len(values), sticky="nsew")
+            dlt_btn = Button(self.table_inner, text="Delete", font=("Arial", 8), width=18,
+                            cursor="hand2", command=lambda k=key: self.delete_record(k))
+            dlt_btn.grid(row=row, column=len(values), sticky="nsew", padx=0, pady=0)
 
     def add_record(self, countdown_time, complete):
         # don't add records for break sessions

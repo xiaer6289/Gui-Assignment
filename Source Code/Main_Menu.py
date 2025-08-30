@@ -39,10 +39,8 @@ def Main_Menu(self):
     bg_label = Label(self, image=bg_image)
     bg_label.image = bg_image
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-    title_label = Label(self)
-    title_label.pack(pady=50)
     btn_timer = Button(self, text="Pomodoro Timer 🎯", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40, command=lambda:start_timer(self), cursor="hand2")
-    btn_timer.pack(pady=20)
+    btn_timer.pack(pady=(100, 20))
     btn_tracker = Button(self, text="Expenses Tracker 📊", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40, command=lambda:start_expenses_tracker(self), cursor="hand2")
     btn_tracker.pack(pady=20)
     btn_note = Button(self, text="Note Organizer 📝", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40, command=lambda:start_note_organizer(self), cursor="hand2")

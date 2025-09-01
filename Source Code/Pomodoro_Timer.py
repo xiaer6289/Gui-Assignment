@@ -48,9 +48,11 @@ class Pomodoro_Timer:
         Validate and apply the typed integer to the appropriate IntVar.
         """
         widget = event.widget
+        # string processing to remove unwanted space that can be made by user
         text = widget.get().strip()
         # basic validation: must be integer
         try:
+            # string processing on converting passing value which default as string to integer
             val = int(text)
         except Exception:
             messagebox.showerror("Invalid input", "Please enter a whole number.")
@@ -103,7 +105,7 @@ class Pomodoro_Timer:
         self.hour_label = Label(timer_frame, text="Hours", font=("Arial", 14))
         self.hour_decrease5_btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5hours, cursor="hand2")
         self.hour_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_hours, cursor="hand2")
-        self.hour_entry = Entry(timer_frame, textvariable=self._hours, width=5)
+        self.hour_entry = Entry(timer_frame, textvariable=self._hours, width=5, cursor="xterm")
         self.hour_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_hours, cursor="hand2")
         self.hour_increase5_btn = Button(timer_frame, text=">>", width=2, command=self.increase_5hours, cursor="hand2")
         self.hour_decrease5_btn.pack(side=LEFT, padx=1)
@@ -118,7 +120,7 @@ class Pomodoro_Timer:
         self.minute_label = Label(timer_frame, text="Minutes", font=("Arial", 14))
         self.minute_decrease_5btn = Button(timer_frame, text="<<", width=2, command=self.decrease_5min, cursor="hand2")
         self.minute_decrease_btn = Button(timer_frame, text="<", width=2, command=self.decrease_min, cursor="hand2")
-        self.minute_entry = Entry(timer_frame, textvariable=self._minutes, width=5)
+        self.minute_entry = Entry(timer_frame, textvariable=self._minutes, width=5, cursor="xterm")
         # bind Enter to commit value for minutes
         self.minute_entry.bind("<Return>", self.handle_enter)
         self.minute_increase_btn = Button(timer_frame, text=">", width=2, command=self.increase_min, cursor="hand2")
@@ -173,7 +175,7 @@ class Pomodoro_Timer:
         def _on_mousewheel(event, c=canvas):
             c.yview_scroll(int(-1 * (event.delta / 120)), 'units')
 
-        # keep scrollregion updated and show/hide scrollbar depending on content height
+        # keep scrollregion update and show/hide scrollbar depending on content height
         def _on_frame_config(event, c=canvas, v=vsb, inner_f=inner):
             c.configure(scrollregion=c.bbox('all'))
             try:
@@ -361,7 +363,7 @@ class Pomodoro_Timer:
                     winsound.Beep()
                 except Exception:
                     pass
-                # record the work session as completed BEFORE switching to break
+                # record the work session as completed before switching to break
                 if hasattr(self, '_countdown_time'):
                     self.add_record(self._countdown_time, True)
                     self._completed = True
@@ -401,7 +403,7 @@ class Pomodoro_Timer:
                 hours = int(self._hours.get())
                 minutes = int(self._minutes.get())
             
-                if hours < 0 or minutes <= 0 or minutes >= 60:
+                if hours < 0 or minutes < 0 or minutes >= 60 or (hours == 0 and minutes == 0):
                     raise ValueError
                 
             #exception handling for value error
@@ -410,6 +412,13 @@ class Pomodoro_Timer:
                 messagebox.showerror("Error", errormsg)
                 return
             
+        # ensure any previously scheduled countdown callback is cancelled
+        try:
+            if hasattr(self, 'timer_id') and self.timer_id is not None:
+                self.window.after_cancel(self.timer_id)
+        except Exception:
+            pass
+
         # only run if input is valid
         self._running = True
         self.start_btn.config(state=DISABLED)
@@ -437,6 +446,13 @@ class Pomodoro_Timer:
             self.start_btn.config(state=NORMAL)
             self.hour_entry.config(state=DISABLED)
             self.minute_entry.config(state=DISABLED)
+            # cancel any scheduled countdown callback to avoid multiple timers
+            try:
+                if hasattr(self, 'timer_id') and self.timer_id is not None:
+                    self.window.after_cancel(self.timer_id)
+                    self.timer_id = None
+            except Exception:
+                pass
 
 
     def reset_timer(self):
@@ -480,7 +496,7 @@ class Pomodoro_Timer:
         # Recreate header (fixed)
         header = ["Date", "Time", "Countdown", "Completion", ""]
         for col, text in enumerate(header):
-            label = Label(self.table_header, text=text, relief="solid", width=16, bg="Blanched Almond")
+            label = Label(self.table_header, text=text, relief="solid", width=16, bg="yellow")
             label.grid(row=0, column=col, sticky="nsew")
 
         # Recreate rows inside scrollable inner frame
@@ -521,14 +537,26 @@ class Pomodoro_Timer:
         if key in self._records_dict:
             del self._records_dict[key]
         self.refresh_table()
+        # persist changes to disk
+        try:
+            self._save()
+        except Exception:
+            pass
 
     def skip(self):
         if self._mode == "Work Session":
+            # to prevent invoking start_timer twice
             # if currently running a work session, record it as incomplete
             if getattr(self, '_running', False) and hasattr(self, '_countdown_time') and not getattr(self, '_completed', False):
                 self.add_record(self._countdown_time, False)
                 self._completed = True
-            # skip to break
+            # cancel any scheduled callback and skip to break
+            try:
+                if hasattr(self, 'timer_id') and self.timer_id is not None:
+                    self.window.after_cancel(self.timer_id)
+                    self.timer_id = None
+            except Exception:
+                pass
             self._break()
         else:
             # skip back to work
@@ -539,6 +567,7 @@ class Pomodoro_Timer:
         self._mode = "Break Session"
         self._hours.set(0)
         self._minutes.set(5)
+        self._seconds.set(0)
         self.update_timer()
         self.text_label.config(text=self._mode)
         self.start_timer()

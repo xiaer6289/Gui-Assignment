@@ -6,33 +6,60 @@ import json
 import os
 
 
-class Pomodoro_Timer:
+class BaseTimer:
+    """A minimal base timer class holding timer state and helpers.
+
+    This demonstrates simple inheritance. GUI classes can extend this
+    to provide widgets and I/O while reusing timer state/logic.
+    """
+    def __init__(self, default_hours=0, default_minutes=25):
+        self._timer = []  # placeholder for any timer identifiers
+        # store defaults as plain integers; GUI IntVar objects are created
+        # later after a Tk root exists (see Pomodoro_Timer.__init__)
+        self._default_hours = default_hours
+        self._default_minutes = default_minutes
+        # placeholders for tkinter variables (created after root is available)
+        self._hours = None
+        self._minutes = None
+        self._seconds = None
+        self._running = False
+        self._break_time = False
+        self._mode = "Work Session"
+        self._title = "pomodoro timer"
+
+    def format_time(self):
+        """Return formatted HH:MM:SS for current time vars."""
+        return f"{self._hours.get():02d}:{self._minutes.get():02d}:{self._seconds.get():02d}"
+
+    def is_time_zero(self):
+        return self._hours.get() == 0 and self._minutes.get() == 0 and self._seconds.get() == 0
+
+
+class Pomodoro_Timer(BaseTimer):
     def __init__(self, filepath='Records.txt'):
+        # initialize file/records first
         self._filepath = filepath
         self._records = {}
         self._load()
+        # initialize base timer state (hours/minutes/seconds, defaults)
+        super().__init__()
+
         # create main window and store on self so other methods can access it
         self.window = Tk()
         self.window.title("Pomodoro Timer")
         app_width = 600
         app_height = 600
 
+    # create tkinter variable objects now that a root exists
+        self._hours = IntVar(value=self._default_hours)
+        self._minutes = IntVar(value=self._default_minutes)
+        self._seconds = IntVar(value=0)
+
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
         x = (screen_width // 2) - (app_width // 2)
         y = (screen_height // 2) - (app_height // 2)
         self.window.geometry(f"{app_width}x{app_height}+{x}+{y}")
-
-        self._timer = [] # save timer 
-        self._default_hours = 0 #initialize minute & hours
-        self._default_minutes = 25
-        self._hours = IntVar(value=self._default_hours)
-        self._minutes = IntVar(value=self._default_minutes)
-        self._seconds = IntVar(value=0)
-        self._running = False
-        self._break_time = False
-        self._mode = "Work Session"
-        self._title = "pomodoro timer"
 
         # build UI (moved out of nested function so attributes are created on self)
         self.widgets()

@@ -250,8 +250,8 @@ class Pomodoro_Timer(BaseTimer):
         if self.hasEnded:
             return
         self.date_label.config(text=now.strftime("%A, %d %B %Y"))
-        if not self._running and self._hours.get() == 0 and self._minutes.get() == 0 and self._seconds.get() == 0:
-            self.timer_label.config(text=now.strftime("%H:%M:%S"))
+        # if not self._running and self._hours.get() == 0 and self._minutes.get() == 0 and self._seconds.get() == 0:
+        #     self.timer_label.config(text=now.strftime("%H:%M:%S"))
         self.window.after(1000, self.date_time_display) # update every second
 
     def update_timer(self):
@@ -633,16 +633,4 @@ class Pomodoro_Timer(BaseTimer):
         from Main_Menu import Main_Menu
         Main_Menu(self.window)
     
-
-
-# change theme (background using image)
-# do main menu
-# inheritance and encapsulation 
-
-# if __name__ == '__main__':
 Pomodoro_Timer()
-
-            # try:
-            #     winsound.PlaySound('so sick.wav', winsound.SND_FILENAME)
-            # except RuntimeError as e:
-            #     print(f"Error playing sound: {e}")

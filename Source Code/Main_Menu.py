@@ -8,6 +8,8 @@ def start_timer(self):
     self.withdraw()
     from Pomodoro_Timer import Pomodoro_Timer
     app = Pomodoro_Timer()
+    # app._minutes.set(25)
+    # app._hours.set(20)
     self.deiconify()
 
 def start_expenses_tracker(self):
@@ -35,7 +37,7 @@ def Main_Menu(self):
         widget.destroy()
     self.title("Main Menu")
     self.geometry("600x600")
-    bg_image = PhotoImage(file="Source Code/External_Source/Test.png")
+    bg_image = PhotoImage(file="External_Source/Main_Menu_img.png")
     bg_label = Label(self, image=bg_image)
     bg_label.image = bg_image
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)

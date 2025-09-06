@@ -432,25 +432,26 @@ class Pomodoro_Timer(BaseTimer):
     def start_timer(self):
         if not self._running:
             try:
-                hours = int(self.hour_entry.get())
-                minutes = int(self.minute_entry.get())
+                hours = int(self.hour_entry.get())   ####
+                minutes = int(self.minute_entry.get())####
 
                 if hours < 0 or minutes < 0 or minutes >= 60 or (hours == 0 and minutes == 0):
-                    raise ValueError("RangeError")
+                    raise ValueError("RangeError")####
 
             except ValueError as e:
-                if str(e) == "RangeError":
-                    errormsg = (
-                        "Invalid input!\n"
-                        "Minutes must be 1-59\n"
-                        "Hours must be positive\n"
-                        "Time cannot be 0:00"
-                    )
+                if str(e) == "RangeError":####
+                    errormsg = (####
+                        "Invalid input!\n"####
+                        "Minutes must be 1-59\n"####
+                        "Hours must be positive\n"  ####
+
+                        "Time cannot be 0:00"       #add this
+                    ) ####
                     
-                else:
-                    errormsg = "Invalid input!\nOnly numbers are allowed."
-                messagebox.showerror("Error", errormsg)
-                return
+                else:   ####
+                    errormsg = "Invalid input!\nOnly numbers are allowed."   ####
+                messagebox.showerror("Error", errormsg)   ####
+                return ####
             
         # ensure any previously scheduled countdown callback is cancelled
         try:
@@ -646,4 +647,3 @@ class Pomodoro_Timer(BaseTimer):
         from Main_Menu import Main_Menu
         Main_Menu(self.window)
     
-#Pomodoro_Timer()

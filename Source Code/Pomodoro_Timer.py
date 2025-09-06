@@ -36,7 +36,7 @@ class BaseTimer:
 
 
 class Pomodoro_Timer(BaseTimer):
-    def __init__(self, filepath='Records.txt'):
+    def __init__(self, master=None, filepath='Records.txt'):
         # initialize file/records first
         self._filepath = filepath
         self._records = {}
@@ -44,8 +44,12 @@ class Pomodoro_Timer(BaseTimer):
         # initialize base timer state (hours/minutes/seconds, defaults)
         super().__init__()
 
-        # create main window and store on self so other methods can access it
-        self.window = Tk()
+        # use master if passed, otherwise create a new Toplevel
+        if master is None:
+            self.window = Tk()
+        else:
+            self.window = Toplevel(master)
+
         self.window.title("Pomodoro Timer")
         app_width = 600
         app_height = 600
@@ -633,4 +637,4 @@ class Pomodoro_Timer(BaseTimer):
         from Main_Menu import Main_Menu
         Main_Menu(self.window)
     
-Pomodoro_Timer()
+#Pomodoro_Timer()

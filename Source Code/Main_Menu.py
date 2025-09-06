@@ -1,13 +1,12 @@
 from tkinter import *
-from PIL import Image 
+from Pomodoro_Timer import Pomodoro_Timer
 
 
 def start_timer(self):
-    for widget in self.winfo_children():
-        widget.destroy()
+    #for widget in self.winfo_children():
+    #   widget.destroy()
     self.withdraw()
-    from Pomodoro_Timer import Pomodoro_Timer
-    app = Pomodoro_Timer()
+    app = Pomodoro_Timer(self)
     # app._minutes.set(25)
     # app._hours.set(20)
     self.deiconify()
@@ -39,7 +38,7 @@ def Main_Menu(self):
     self.geometry("600x600")
     bg_image = PhotoImage(file="External_Source/Main_Menu_img.png")
     bg_label = Label(self, image=bg_image)
-    bg_label.image = bg_image
+    bg_label.Image = bg_image
     bg_label.place(x=0, y=0, relwidth=1, relheight=1)
     btn_timer = Button(self, text="Pomodoro Timer 🎯", font=("Comic Sans Ms", 16), bg="Blanched Almond", width=40, command=lambda:start_timer(self), cursor="hand2")
     btn_timer.pack(pady=(100, 20))

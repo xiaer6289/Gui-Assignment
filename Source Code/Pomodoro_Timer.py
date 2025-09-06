@@ -36,7 +36,7 @@ class BaseTimer:
 
 
 class Pomodoro_Timer(BaseTimer):
-    def __init__(self, filepath='Records.txt'):
+    def __init__(self, master=None, filepath='Records.txt'):
         # initialize file/records first
         self._filepath = filepath
         self._records = {}
@@ -44,8 +44,12 @@ class Pomodoro_Timer(BaseTimer):
         # initialize base timer state (hours/minutes/seconds, defaults)
         super().__init__()
 
-        # create main window and store on self so other methods can access it
-        self.window = Tk()
+        # use master if passed, otherwise create a new Toplevel
+        if master is None:
+            self.window = Tk()
+        else:
+            self.window = Toplevel(master)
+
         self.window.title("Pomodoro Timer")
         app_width = 600
         app_height = 600
@@ -395,6 +399,7 @@ class Pomodoro_Timer(BaseTimer):
                     self.add_record(self._countdown_time, True)
                     self._completed = True
                 self._break()
+            
             else:
                 info2 = "Times Up! Break session end!\nTime to Work!"
                 messagebox.showinfo("Times Up!", info2)
@@ -427,15 +432,23 @@ class Pomodoro_Timer(BaseTimer):
     def start_timer(self):
         if not self._running:
             try:
-                hours = int(self._hours.get())
-                minutes = int(self._minutes.get())
-            
+                hours = int(self.hour_entry.get())
+                minutes = int(self.minute_entry.get())
+
                 if hours < 0 or minutes < 0 or minutes >= 60 or (hours == 0 and minutes == 0):
-                    raise ValueError
-                
-            #exception handling for value error
+                    raise ValueError("RangeError")
+
             except ValueError as e:
-                errormsg = "Invalid input!\nOnly accept 1-59 for minutes\nOnly accept positive number for hours"
+                if str(e) == "RangeError":
+                    errormsg = (
+                        "Invalid input!\n"
+                        "Minutes must be 1-59\n"
+                        "Hours must be positive\n"
+                        "Time cannot be 0:00"
+                    )
+                    
+                else:
+                    errormsg = "Invalid input!\nOnly numbers are allowed."
                 messagebox.showerror("Error", errormsg)
                 return
             
@@ -633,4 +646,4 @@ class Pomodoro_Timer(BaseTimer):
         from Main_Menu import Main_Menu
         Main_Menu(self.window)
     
-Pomodoro_Timer()
+#Pomodoro_Timer()

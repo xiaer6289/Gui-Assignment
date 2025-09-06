@@ -7,8 +7,6 @@ def start_timer(self):
     #   widget.destroy()
     self.withdraw()
     app = Pomodoro_Timer(self)
-    # app._minutes.set(25)
-    # app._hours.set(20)
     self.deiconify()
 
 def start_expenses_tracker(self):
@@ -56,5 +54,3 @@ if __name__ == "__main__":
     window = Tk()
     Main_Menu(window)
     window.mainloop()
-
-# image not for entier background why

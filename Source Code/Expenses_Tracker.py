@@ -159,10 +159,10 @@ class Expenses_Tracker(ExpenseBase):
         buttons_frame.grid(row=5, column=0, columnspan=2, pady=10)
 
         # Add Expense button
-        tk.Button(buttons_frame, text="Add Expense", command=self.add_expense, bg="blue", fg="white",  font=("Arial", 10, "bold")).pack(side="left", padx=20)
+        tk.Button(buttons_frame, text="Add Expense", command=self.add_expense, bg="blue", fg="white",  font=("Arial", 10, "bold"), cursor="hand2").pack(side="left", padx=20)
 
         # Delete Expense button
-        tk.Button(buttons_frame, text="Delete Expense", command=self.delete_expense, bg="red", fg="white",  font=("Arial", 10, "bold")).pack(side="left", padx=0)
+        tk.Button(buttons_frame, text="Delete Expense", command=self.delete_expense, bg="red", fg="white",  font=("Arial", 10, "bold"), cursor="hand2").pack(side="left", padx=0)
 
         # Output area
         columns = ("no.", "date", "category", "remarks", "amount")

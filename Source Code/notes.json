@@ -1,0 +1,20 @@
+[
+    {
+        "type": "ImageNote",
+        "title": "File 1",
+        "content": "This is file 1",
+        "tags": "file",
+        "category": "file",
+        "last_modified": "2025-09-13 23:49:04",
+        "image_path": "C:/Users/User/OneDrive/Pictures/Screenshots/Screenshot 2025-06-24 222214.png"
+    },
+    {
+        "type": "ImageNote",
+        "title": "Note 2",
+        "content": "This is Note 2",
+        "tags": "Note",
+        "category": "Note",
+        "last_modified": "2025-09-13 23:49:30",
+        "image_path": "C:/Users/User/OneDrive/Pictures/Screenshots/Screenshot 2025-06-25 225010.png"
+    }
+]

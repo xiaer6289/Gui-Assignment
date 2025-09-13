@@ -22,9 +22,12 @@ def start_expenses_tracker(self):
 
 def start_note_organizer(self):
     self.withdraw()
-    # from Note_Organizer import Note_Organizer
-    # app = Note_Organizer()
-    self.deiconify()
+    from Note_Organizer import Note_Organizer
+    
+    tracker_window = Toplevel(self)  # create a new child window
+    app = Note_Organizer(tracker_window)
+
+    tracker_window.protocol("WM_DELETE_WINDOW", lambda: (tracker_window.destroy(), self.deiconify()))
 
 def start_reminder_app(self):
     self.withdraw()

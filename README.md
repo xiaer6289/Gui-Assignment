@@ -19,7 +19,10 @@ This assignment is a very basic and common application designed to help students
 
 
 * ### Note Organizer
-
-
+  * enables users to add, edit, and delete notes for effective organization
+  * supports categorizing notes and adding tags for easier searching
+  * accommodates both text notes and image notes, allowing information to be stored in multiple formats
+  * includes search and filter functions so users can quickly find notes by keyword or category
+  * allows users to manually remove unwanted records for better ordering and flexibility
 
 * ### Simple Reminder APP

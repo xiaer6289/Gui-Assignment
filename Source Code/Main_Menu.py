@@ -10,10 +10,15 @@ def start_timer(self):
     self.deiconify()
 
 def start_expenses_tracker(self):
-    self.withdraw()
-    # from Expenses_Tracker import Expenses_Tracker
-    # app = Expenses_Tracker()
-    self.deiconify()
+    self.withdraw()  # hide main menu
+    from Expenses_Tracker import Expenses_Tracker
+    
+    tracker_window = Toplevel(self)  # create a new child window
+    app = Expenses_Tracker(tracker_window)  # ✅ pass tracker_window into the class
+    
+    # when the expense tracker window closes, bring back the main menu
+    tracker_window.protocol("WM_DELETE_WINDOW", lambda: (tracker_window.destroy(), self.deiconify()))
+
 
 def start_note_organizer(self):
     self.withdraw()

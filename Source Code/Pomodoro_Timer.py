@@ -7,11 +7,6 @@ import os
 
 
 class BaseTimer:
-    """A minimal base timer class holding timer state and helpers.
-
-    This demonstrates simple inheritance. GUI classes can extend this
-    to provide widgets and I/O while reusing timer state/logic.
-    """
     def __init__(self, default_hours=0, default_minutes=25):
         self._timer = []  # placeholder for any timer identifiers
         # store defaults as plain integers; GUI IntVar objects are created
@@ -101,7 +96,7 @@ class Pomodoro_Timer(BaseTimer):
                 return
             self._minutes.set(val)
         else:
-            # unknown widget - ignore
+            # ignore unknown widget
             return
 
         # update visible timer immediately

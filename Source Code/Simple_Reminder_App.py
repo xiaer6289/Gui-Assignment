@@ -174,11 +174,15 @@ class Simple_Reminder_App:
             self.title_entry.grid_remove()
 
     def update_repeat_options(self, event=None):
-        """Show or hide repeat day checkboxes."""
+        """Show/hide repeat day checkboxes and date field."""
         if self.repeat_combo.get() == "Repeat":
             self.days_frame.grid()
+            self.date_label.grid_remove()
+            self.date_entry.grid_remove()
         else:
             self.days_frame.grid_remove()
+            self.date_label.grid(row=0, column=2, sticky="w", padx=(20, 0))
+            self.date_entry.grid(row=0, column=3, padx=5)
 
     def clear_form(self):
         """Reset form fields to default."""
@@ -271,12 +275,22 @@ class Simple_Reminder_App:
         now = datetime.now()
 
         for index, r in enumerate(self.manager.reminders):
+            # Split datetime into date and time
             date_str, time_str = r['datetime'].split(" ")
+
+            # If repeat reminder, don't show a specific date
+            if r['repeat_type'] == "repeat":
+                date_str = "-"  # or "" to leave it blank
+
+            # Display selected days or "-" if none
             days = ", ".join(r.get('days_of_week', [])) if r.get('days_of_week') else "-"
 
+            # Alternate row colors
             tag = "evenrow" if index % 2 == 0 else "oddrow"
 
             reminder_time = datetime.strptime(r["datetime"], "%Y-%m-%d %H:%M")
+
+            # Mark overdue reminders
             if r["repeat_type"] == "once" and reminder_time < now:
                 tag = "overdue"
             elif r["repeat_type"] == "repeat":
@@ -284,9 +298,14 @@ class Simple_Reminder_App:
                 if current_day in r.get("days_of_week", []) and reminder_time.time() < now.time():
                     tag = "overdue"
 
-            self.tree.insert("", "end",
-                             values=(r['title'], date_str, time_str, r['repeat_type'].capitalize(), days),
-                             tags=(tag,))
+            # Insert into the Treeview
+            self.tree.insert(
+                "",
+                "end",
+                values=(r['title'], date_str, time_str, r['repeat_type'].capitalize(), days),
+                tags=(tag,)
+            )
+
 
     # reminder checker to check where reminders are due
     def check_reminders(self):

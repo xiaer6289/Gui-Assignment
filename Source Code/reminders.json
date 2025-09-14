@@ -5,5 +5,32 @@
         "repeat_type": "once",
         "days_of_week": [],
         "triggered": false
+    },
+    {
+        "title": "Task",
+        "datetime": "2025-09-14 19:23",
+        "repeat_type": "once",
+        "days_of_week": [],
+        "triggered": true
+    },
+    {
+        "title": "Meeting",
+        "datetime": "2025-09-14 19:36",
+        "repeat_type": "repeat",
+        "days_of_week": [
+            "Mon",
+            "Sun"
+        ],
+        "triggered": false
+    },
+    {
+        "title": "Meeting",
+        "datetime": "2025-09-14 19:41",
+        "repeat_type": "repeat",
+        "days_of_week": [
+            "Mon",
+            "Tue"
+        ],
+        "triggered": false
     }
 ]

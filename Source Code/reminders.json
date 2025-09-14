@@ -32,5 +32,15 @@
             "Tue"
         ],
         "triggered": false
+    },
+    {
+        "title": "Meeting",
+        "datetime": "2025-09-14 19:54",
+        "repeat_type": "repeat",
+        "days_of_week": [
+            "Tue",
+            "Sun"
+        ],
+        "triggered": false
     }
 ]

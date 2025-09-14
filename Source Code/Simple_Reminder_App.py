@@ -231,19 +231,13 @@ class Simple_Reminder_App:
         repeat_type = self.repeat_combo.get().lower()
         days_selected = [day for day, var in self.days_vars.items() if var.get()]
 
-        # validation for repeat reminders
+        # Validation for repeat reminders
         if repeat_type == "repeat":
-            if reminder_datetime < datetime.now():
-                messagebox.showwarning(
-                    "Input Error",
-                    "For repeating reminders, please choose a future time today (or a valid day)."
-                )
-                return
             if not days_selected:
                 messagebox.showwarning("Input Error", "Please select at least one day for repeating reminder!")
                 return
 
-        # validation for once reminders
+        # Validation for once reminders
         if repeat_type == "once" and reminder_datetime < datetime.now():
             messagebox.showwarning("Input Error", "The date and time must be in the future!")
             return
@@ -265,6 +259,7 @@ class Simple_Reminder_App:
 
         self.refresh_list()
         self.clear_form()
+
 
     # refresh the reminder list in the table
     def refresh_list(self):
@@ -327,7 +322,7 @@ class Simple_Reminder_App:
                     current_day = now.strftime("%a")
                     if current_day in reminder["days_of_week"] and now.strftime("%H:%M") == reminder_time.strftime("%H:%M"):
                         self.trigger_alert(reminder)
-            time.sleep(30)
+            time.sleep(60)
 
     # reminder popup functions
     def trigger_alert(self, reminder):

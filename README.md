@@ -15,6 +15,13 @@ This assignment is a very basic and common application designed to help students
   * student can fast forward themselves if they want to skip to break session, but the record will indicate them as incomplete
 
 * ### Expenses Tracker
+  * allow user to manage and monitor their daily expenses efficiently
+  * allow user to add amount, category, remarks and date for each expense
+  * allow user to delete the expense record when no longer needed
+  * enable user to view their expenses record in table format
+  * alow user to view the total expenses monthly and the total expenses by category
+  * include a pie chart to show all the percentage of expenses by category
+  * allow user to switch between months and years to view expenses history
 
 
 

@@ -33,3 +33,7 @@ This assignment is a very basic and common application designed to help students
   * allows users to manually remove unwanted records for better ordering and flexibility
 
 * ### Simple Reminder APP
+  *allows users to set reminders with a custom title, date, and time
+  *supports both one-time reminders and repeating reminders
+  *allow users edit or delete existing reminders for better flexibility and control
+  

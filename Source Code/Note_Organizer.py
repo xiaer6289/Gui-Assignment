@@ -378,6 +378,7 @@ class Note_Organizer:
             self.clear_editor()
             self.refresh_list()
             messagebox.showinfo("Success", "Note added successfully!")
+        self.new_note()
 
     # refresh left panel including note list with search filter
     def refresh_list(self, *args):
